@@ -21,20 +21,41 @@
 //   );
 // }
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './movies/components/Navbar';
 import Home from './movies/pages/Home';
 import Favorites from './movies/pages/Favorites';
 import Watchlist from './movies/pages/Watchlist';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   return (
     <BrowserRouter>
-      <Navbar />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: theme === 'dark' ? '#1e293b' : '#fff',
+            color: theme === 'dark' ? '#fff' : '#000',
+          }
+        }}
+      />
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
 
       {/* Contenu principal */}
-      <main className="py-4 bg-light min-vh-100">
+      <main className="py-4 bg-light-custom min-vh-100">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/favorites" element={<Favorites />} />
@@ -46,3 +67,5 @@ const App = () => {
 };
 
 export default App;
+
+

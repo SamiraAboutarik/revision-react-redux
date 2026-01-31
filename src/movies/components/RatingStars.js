@@ -1,20 +1,26 @@
 import React from 'react';
+import { Star } from 'lucide-react';
 
 const RatingStars = ({ rating, onSelect }) => {
   return (
-    <div>
+    <div className="d-flex gap-1 align-items-center">
       {[1, 2, 3, 4, 5].map(star => (
-        <span
+        <Star
           key={star}
-          className={`fs-5 me-1 ${star <= rating ? 'text-warning' : 'text-secondary'}`}
-          style={{ cursor: onSelect ? 'pointer' : 'default' }}
+          size={18}
+          fill={star <= rating ? "#f59e0b" : "transparent"}
+          className={star <= rating ? 'text-warning' : 'text-muted opacity-50'}
+          style={{
+            cursor: onSelect ? 'pointer' : 'default',
+            transition: 'all 0.2s ease'
+          }}
           onClick={() => onSelect && onSelect(star)}
-        >
-          ★
-        </span>
+        />
       ))}
+      <span className="ms-2 small fw-bold text-main opacity-75">{rating}</span>
     </div>
   );
 };
 
 export default RatingStars;
+
